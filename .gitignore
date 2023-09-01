@@ -1,0 +1,5 @@
+*.txt
+*.zip
+*.out
+wandb*
+bird_data/
