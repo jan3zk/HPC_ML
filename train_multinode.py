@@ -11,7 +11,6 @@ import wandb
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--net', default='resnet18', type=str)
     parser.add_argument('--lr', default=1e-3, type=float, help='learning rate')
     parser.add_argument('--batch_size', default=16, type=int, help='batch size per GPU')
     parser.add_argument('--gpu', default=None, type=int)
@@ -60,7 +59,7 @@ def main(args):
     ### model ###
     model = torchvision.models.resnet152(pretrained=True)
     #model.train()
-    model.fc = nn.Linear(model.fc.in_features, 300)
+    model.fc = nn.Linear(model.fc.in_features, 400)
     for param in model.parameters():
         param.requires_grad = False
     for param in model.fc.parameters():
@@ -90,7 +89,7 @@ def main(args):
     }
 
     if args.rank == 0:
-        wandb.init(mode="offline", project="bird_example", entity="janezk", name="bird_example_multi_gpu")
+        wandb.init(mode="online", project="bird_example_arnes", entity="janezk", name="bird_example_multi_gpu")
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 
@@ -98,14 +97,14 @@ def main(args):
         [transforms.ToTensor()])
 
 
-    train_dataset = torchvision.datasets.ImageFolder(root="./bird_data/train/", transform=transform)
+    train_dataset = torchvision.datasets.ImageFolder(root="/d/hpc/projects/FRI/DL/example/bird_data/train/", transform=transform)
 
     train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset, shuffle=True)
     train_loader = torch.utils.data.DataLoader(
         train_dataset, batch_size=args.batch_size, shuffle=(train_sampler is None),
         num_workers=args.workers, pin_memory=True, sampler=train_sampler, drop_last=True)
 
-    val_dataset = torchvision.datasets.ImageFolder(root="./bird_data/valid/", transform=transform)
+    val_dataset = torchvision.datasets.ImageFolder(root="/d/hpc/projects/FRI/DL/example/bird_data/valid/", transform=transform)
 
     val_sampler = torch.utils.data.distributed.DistributedSampler(val_dataset, shuffle=False)
     val_loader = torch.utils.data.DataLoader(
