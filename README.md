@@ -29,12 +29,6 @@ Details: https://wandb.ai/janezk/bird_example_arnes/runs/s4amb7l6/. Running time
 
 Less overhead than DataParallel. 
 ```bash
-sbatch train_multinode_sbatch.sh
+sbatch train_multinode.sh
 ```
 See details on the experiment at https://wandb.ai/janezk/bird_example_arnes/runs/trrp5ou3. Running time cca. 10 min.
-
-### Data parallelization on multiple nodes using torchrun instead of srun
-
-```bash
-sbatch train_2nodes_4gpus_arnes.sh
-```

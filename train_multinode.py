@@ -33,17 +33,12 @@ def parse_args():
     args = parser.parse_args()
     return args
 
-
-
-
 def main(args):
     # DDP setting
     if "WORLD_SIZE" in os.environ:
         args.world_size = int(os.environ["WORLD_SIZE"])
     args.distributed = args.world_size > 1
     ngpus_per_node = torch.cuda.device_count()
-
-
 
     if args.distributed:
         if args.local_rank != -1:  # for torch.distributed.launch
@@ -55,11 +50,9 @@ def main(args):
         dist.init_process_group(backend=args.dist_backend, init_method=args.dist_url,
                                 world_size=args.world_size, rank=args.rank)
 
-
     ### model ###
-    model = torchvision.models.resnet152(pretrained=True)
-    #model.train()
-    model.fc = nn.Linear(model.fc.in_features, 400)
+    model = torchvision.models.resnet152(weights=torchvision.models.ResNet152_Weights.IMAGENET1K_V1)
+    model.fc = nn.Linear(model.fc.in_features, 400) # should be equal to len(train_dataset.classes)
     for param in model.parameters():
         param.requires_grad = False
     for param in model.fc.parameters():
@@ -81,7 +74,6 @@ def main(args):
     else:
         raise NotImplementedError("Only DistributedDataParallel is supported.")
 
-
     wandb.config = {
         "learning_rate": args.lr,
         "epochs": args.epochs,
@@ -96,7 +88,6 @@ def main(args):
     transform = transforms.Compose(
         [transforms.ToTensor()])
 
-
     train_dataset = torchvision.datasets.ImageFolder(root="/d/hpc/projects/FRI/DL/example/bird_data/train/", transform=transform)
 
     train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset, shuffle=True)
@@ -110,7 +101,6 @@ def main(args):
     val_loader = torch.utils.data.DataLoader(
         val_dataset, batch_size=args.batch_size, shuffle=False,
         num_workers=args.workers, pin_memory=True, sampler=val_sampler, drop_last=False)
-
 
     torch.backends.cudnn.benchmark = True
     criterion = torch.nn.CrossEntropyLoss()
@@ -127,6 +117,7 @@ def main(args):
 
 def train_one_epoch(train_loader, model, criterion, optimizer, epoch, args):
     model.train()
+    print(f"Epoch {epoch}, Rank {args.rank}")
     for i,batch in enumerate(train_loader):
         image_batch = batch[0].cuda(args.gpu, non_blocking=True)
         annotation_batch = batch[1].cuda(args.gpu, non_blocking=True)
@@ -135,7 +126,6 @@ def train_one_epoch(train_loader, model, criterion, optimizer, epoch, args):
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-
 
 def validate(val_loader, model, criterion, epoch, args):
     counter = torch.zeros((2,), device=torch.device(f'cuda:{args.gpu}'))
@@ -166,9 +156,6 @@ def validate(val_loader, model, criterion, epoch, args):
             pred_table.add_data(*row)
         print("Epoch ",epoch," Cls. Acc: ", (counter[0]/counter[1]).item())
         wandb.log({"Val. CA": (counter[0]/counter[1]), "Val. Table": pred_table}, step=epoch)
-
-
-
 
 if __name__ == '__main__':
     args = parse_args()

@@ -5,7 +5,7 @@ import torchvision
 import torchvision.transforms as transforms
 import wandb
 
-wandb.init(mode="offline", project="bird_example", entity="janezk", name="bird_example_1node_2gpus")
+wandb.init(project="bird_example_arnes", entity="janezk", name="bird_example_1node_2gpus")
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--out_path', default='./bird_data/', type=str)
@@ -14,7 +14,7 @@ def parse_args():
     parser.add_argument('--start_epoch', default=0, type=int,
                         help='start epoch number (useful on restarts)')
     parser.add_argument('--epochs', default=10, type=int, help='number of total epochs to run')
-    parser.add_argument('-j', '--workers', default=12, type=int, metavar='N',
+    parser.add_argument('-j', '--workers', default=24, type=int, metavar='N',
                         help='number of data loading workers (default: 32)')
     args = parser.parse_args()
     return args
@@ -28,13 +28,13 @@ def main(args):
         "batch_size": args.batch_size
     }
 
-    model = torchvision.models.resnet152(pretrained=True)
+    model = torchvision.models.resnet152(weights=torchvision.models.ResNet152_Weights.IMAGENET1K_V1)
     model.fc = nn.Linear(model.fc.in_features, 400)
     for param in model.parameters():
         param.requires_grad = False
     for param in model.fc.parameters():
         param.requires_grad = True
-    
+
     if torch.cuda.device_count() > 1:
         print("Using", torch.cuda.device_count(), "GPUs!")
         model = nn.DataParallel(model)

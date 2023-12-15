@@ -1,24 +1,21 @@
 #!/bin/sh
-#SBATCH --reservation=fe
-#SBATCH --job-name=train_birds_single_gpu
-#SBATCH --output=train_birds_single_gpu.out
-#SBATCH --time=05:00:00       # job time limit
+#SBATCH --job-name=train_birds_1node_2gpus
+#SBATCH --output=train_birds_1node_2gpus.out
+#SBATCH --time=01:00:00       # job time limit
 #SBATCH --nodes=1             # number of nodes
 #SBATCH --ntasks-per-node=1   # number of tasks
-#SBATCH --gres=gpu:2
-#SBATCH --constraint=gpu
-#SBATCH --cpus-per-task=16    # number of allocated cores
+#SBATCH --partition=gpu
+#SBATCH --cpus-per-task=24    # number of allocated cores
 #SBATCH --gpus-per-task=2
-#SBATCH --mem-per-gpu=12G     # memory allocation
+#SBATCH --mem-per-gpu=32G     # memory allocation
+#SBATCH --nodelist=wn223
 
 #module load PyTorch/1.7.1-fosscuda-2020b
 
 source ~/miniconda3/etc/profile.d/conda.sh # intialize conda
-conda activate py37                 # activate the previously created environment
+conda activate py310                 # activate the previously created environment
 
-OUT_PATH=/ceph/grid/home/$USER/delavnica3/bird_data/
+OUT_PATH=/d/hpc/projects/FRI/DL/example/bird_data/
 
 # Run the training script twice with different hyperparameters.
-srun --nodes=1 --exclusive --gpus=2 --ntasks=1 python train_1node_2gpus.py --lr 1e-4 --epochs 1 --batch_size 128 --out_path $OUT_PATH &
-
-wait
+srun --nodes=1 --gpus=2 --ntasks=1 python train_1node_2gpus.py --lr 1e-4 --epochs 10 --batch_size 256 --out_path $OUT_PATH

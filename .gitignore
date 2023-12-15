@@ -1,5 +1,6 @@
 *.txt
 *.zip
 *.out
-wandb*
+*.bak*
+wandb/
 bird_data/

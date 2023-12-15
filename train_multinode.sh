@@ -17,7 +17,7 @@
 source ~/miniconda3/etc/profile.d/conda.sh # intialize conda
 conda activate py310                 # activate the previously created environment
 
-export MASTER_PORT=50321 #50188
+export MASTER_PORT=50321
 master_addr=$(scontrol show hostnames "$SLURM_JOB_NODELIST" | head -n 1)
 export MASTER_ADDR=$master_addr
 export RANK=$SLURM_PROCID
@@ -30,7 +30,7 @@ echo "JOB_NODELIST="${SLURM_JOB_NODELIST}
 ### change 5-digit MASTER_PORT as you wish, slurm will raise Error if duplicated with others
 ### change WORLD_SIZE as gpus/node * num_nodes
 ### the command to run
-srun python train_multinode.py --lr 1e-4 --epochs 10 --batch_size 512
+srun python train_multinode.py --lr 1e-4 --epochs 10 --batch_size 64
 
 #export NCCL_P2P_DISABLE=1
 #export NCCL_IB_DISABLE=1

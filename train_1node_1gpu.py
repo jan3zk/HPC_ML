@@ -15,8 +15,8 @@ def parse_args():
     parser.add_argument('--gpu', default=None, type=int)
     parser.add_argument('--start_epoch', default=0, type=int,
                         help='start epoch number (useful on restarts)')
-    parser.add_argument('--epochs', default=8, type=int, help='number of total epochs to run')
-    parser.add_argument('-j', '--workers', default=8, type=int, metavar='N',
+    parser.add_argument('--epochs', default=10, type=int, help='number of total epochs to run')
+    parser.add_argument('-j', '--workers', default=12, type=int, metavar='N',
                         help='number of data loading workers (default: 32)')
     args = parser.parse_args()
     return args
