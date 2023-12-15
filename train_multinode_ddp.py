@@ -81,7 +81,7 @@ def main(args):
     }
 
     if args.rank == 0:
-        wandb.init(mode="online", project="bird_example_arnes", entity="janezk", name="bird_example_multi_gpu")
+        wandb.init(mode="online", project="bird_example", entity="janezk", name="bird_example_multinode")
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 

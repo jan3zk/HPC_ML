@@ -1,6 +1,6 @@
 #!/bin/sh
-#SBATCH --job-name=train_birds_1node_2gpus
-#SBATCH --output=train_birds_1node_2gpus.out
+#SBATCH --job-name=train_singlenode_dp
+#SBATCH --output=train_singlenode.out
 #SBATCH --time=01:00:00       # job time limit
 #SBATCH --nodes=1             # number of nodes
 #SBATCH --ntasks-per-node=1   # number of tasks
@@ -8,9 +8,6 @@
 #SBATCH --cpus-per-task=24    # number of allocated cores
 #SBATCH --gpus-per-task=2
 #SBATCH --mem-per-gpu=32G     # memory allocation
-#SBATCH --nodelist=wn223
-
-#module load PyTorch/1.7.1-fosscuda-2020b
 
 source ~/miniconda3/etc/profile.d/conda.sh # intialize conda
 conda activate py310                 # activate the previously created environment

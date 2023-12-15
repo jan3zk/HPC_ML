@@ -5,23 +5,24 @@ import torchvision
 import torchvision.transforms as transforms
 import wandb
 
-wandb.init(project="bird_example_arnes", entity="janezk", name="bird_example_1node_2gpus")
+wandb.init(project="bird_example", entity="janezk", name="bird_example_singlenode")
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--out_path', default='./bird_data/', type=str)
     parser.add_argument('--lr', default=1e-3, type=float, help='learning rate')
     parser.add_argument('--batch_size', default=16, type=int, help='batch size per GPU')
+    parser.add_argument('--gpu', default=None, type=int)
     parser.add_argument('--start_epoch', default=0, type=int,
                         help='start epoch number (useful on restarts)')
     parser.add_argument('--epochs', default=10, type=int, help='number of total epochs to run')
-    parser.add_argument('-j', '--workers', default=24, type=int, metavar='N',
+    parser.add_argument('-j', '--workers', default=12, type=int, metavar='N',
                         help='number of data loading workers (default: 32)')
     args = parser.parse_args()
     return args
 
-
 def main(args):
-
+    print("Number of GPUS: %d"%torch.cuda.device_count())
     wandb.config = {
         "learning_rate": args.lr,
         "epochs": args.epochs,
@@ -34,10 +35,6 @@ def main(args):
         param.requires_grad = False
     for param in model.fc.parameters():
         param.requires_grad = True
-
-    if torch.cuda.device_count() > 1:
-        print("Using", torch.cuda.device_count(), "GPUs!")
-        model = nn.DataParallel(model)
     model.cuda()
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
@@ -103,7 +100,7 @@ def validate(val_loader, model, epoch):
     print("Cls. Acc: ",(tp_sum/cnt).item())
     wandb.log({"Val. CA": tp_sum/cnt, "Val. Table":pred_table})
 
-
 if __name__ == '__main__':
     args = parse_args()
-    main(args)
+    with torch.cuda.device(args.gpu):
+        main(args)

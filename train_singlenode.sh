@@ -1,6 +1,6 @@
 #!/bin/sh
-#SBATCH --job-name=train_birds_1node_1gpu
-#SBATCH --output=train_birds_1node_1gpu.out
+#SBATCH --job-name=train_singlenode
+#SBATCH --output=train_singlenode.out
 #SBATCH --time=05:00:00       # job time limit
 #SBATCH --nodes=1             # number of nodes
 #SBATCH --ntasks=2

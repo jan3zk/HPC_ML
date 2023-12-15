@@ -12,7 +12,6 @@
 #SBATCH --gpus-per-task=1
 #SBATCH --cpus-per-task=12
 #SBATCH --mem=32gb
-### init virtual environment if needed
 
 source ~/miniconda3/etc/profile.d/conda.sh # intialize conda
 conda activate py310                 # activate the previously created environment
