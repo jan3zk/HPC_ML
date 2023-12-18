@@ -19,7 +19,6 @@ def parse_args():
     args = parser.parse_args()
     return args
 
-
 def main(args):
 
     wandb.config = {
@@ -56,7 +55,6 @@ def main(args):
     val_loader = torch.utils.data.DataLoader(
         val_dataset, batch_size=args.batch_size, shuffle=False,
         num_workers=args.workers, drop_last=False)
-
 
     criterion = torch.nn.CrossEntropyLoss()
 
@@ -102,7 +100,6 @@ def validate(val_loader, model, epoch):
         pred_table.add_data(*row)
     print("Cls. Acc: ",(tp_sum/cnt).item())
     wandb.log({"Val. CA": tp_sum/cnt, "Val. Table":pred_table})
-
 
 if __name__ == '__main__':
     args = parse_args()
