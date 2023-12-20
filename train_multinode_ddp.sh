@@ -28,8 +28,11 @@ echo "JOB_NODELIST="${SLURM_JOB_NODELIST}
 
 ### change 5-digit MASTER_PORT as you wish, slurm will raise Error if duplicated with others
 ### change WORLD_SIZE as gpus/node * num_nodes
+
+OUT_PATH=/d/hpc/projects/FRI/DL/example/bird_data/
+
 ### the command to run
-srun python train_multinode.py --lr 1e-4 --epochs 10 --batch_size 64
+srun python train_multinode_ddp.py --lr 1e-4 --epochs 10 --batch_size 64 --out_path $OUT_PATH
 
 #export NCCL_P2P_DISABLE=1
 #export NCCL_IB_DISABLE=1

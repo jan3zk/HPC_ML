@@ -20,16 +20,17 @@ def parse_args():
     parser.add_argument('-j', '--workers', default=8, type=int, metavar='N',
                         help='number of data loading workers (default: 32)')
     # DDP configs:
-    parser.add_argument('--world-size', default=-1, type=int,
+    parser.add_argument('--world_size', default=-1, type=int,
                         help='number of nodes for distributed training')
     parser.add_argument('--rank', default=-1, type=int,
                         help='node rank for distributed training')
-    parser.add_argument('--dist-url', default='env://', type=str,
+    parser.add_argument('--dist_url', default='env://', type=str,
                         help='url used to set up distributed training')
     parser.add_argument('--dist-backend', default='nccl', type=str,
                         help='distributed backend')
     parser.add_argument('--local_rank', default=-1, type=int,
                         help='local rank for distributed training')
+    parser.add_argument('--out_path', default='./bird_data/', type=str)
     args = parser.parse_args()
     return args
 
@@ -47,8 +48,7 @@ def main(args):
         elif 'SLURM_PROCID' in os.environ:  # for slurm scheduler
             args.rank = int(os.environ['SLURM_PROCID'])
             args.gpu = args.rank % torch.cuda.device_count()
-        dist.init_process_group(backend=args.dist_backend, init_method=args.dist_url,
-                                world_size=args.world_size, rank=args.rank)
+        dist.init_process_group(backend=args.dist_backend, init_method=args.dist_url, world_size=args.world_size, rank=args.rank)
 
     ### model ###
     model = torchvision.models.resnet152(weights=torchvision.models.ResNet152_Weights.IMAGENET1K_V1)
@@ -88,14 +88,14 @@ def main(args):
     transform = transforms.Compose(
         [transforms.ToTensor()])
 
-    train_dataset = torchvision.datasets.ImageFolder(root="/d/hpc/projects/FRI/DL/example/bird_data/train/", transform=transform)
+    train_dataset = torchvision.datasets.ImageFolder(root=args.out_path+"train/", transform=transform)
 
     train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset, shuffle=True)
     train_loader = torch.utils.data.DataLoader(
         train_dataset, batch_size=args.batch_size, shuffle=(train_sampler is None),
         num_workers=args.workers, pin_memory=True, sampler=train_sampler, drop_last=True)
 
-    val_dataset = torchvision.datasets.ImageFolder(root="/d/hpc/projects/FRI/DL/example/bird_data/valid/", transform=transform)
+    val_dataset = torchvision.datasets.ImageFolder(root=args.out_path+"valid/", transform=transform)
 
     val_sampler = torch.utils.data.distributed.DistributedSampler(val_dataset, shuffle=False)
     val_loader = torch.utils.data.DataLoader(

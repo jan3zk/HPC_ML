@@ -4,3 +4,4 @@
 *.bak*
 wandb/
 bird_data/
+lightning_logs/
