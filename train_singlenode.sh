@@ -15,7 +15,7 @@ conda activate py310  # activate the previously created environment
 
 OUT_PATH=/d/hpc/projects/FRI/DL/example/bird_data/
 
-srun --nodes=1 --exclusive --gpus=1 --ntasks=1 python train_1node_1gpu.py --gpu 0 --lr 1e-4 --epochs 10 --batch_size 64 --out_path $OUT_PATH &
-srun --nodes=1 --exclusive --gpus=1 --ntasks=1  python train_1node_1gpu.py --gpu 1 --lr 1e-3 --epochs 10 --batch_size 64 --out_path $OUT_PATH &
+srun --nodes=1 --exclusive --gpus=1 --ntasks=1 python train_singlenode.py --gpu 0 --lr 1e-4 --epochs 10 --batch_size 64 --out_path $OUT_PATH &
+srun --nodes=1 --exclusive --gpus=1 --ntasks=1 python train_singlenode.py --gpu 1 --lr 1e-3 --epochs 10 --batch_size 64 --out_path $OUT_PATH &
 
 wait
