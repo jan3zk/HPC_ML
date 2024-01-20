@@ -17,7 +17,7 @@ sbatch train_singlenode.sh
 ```
 Details for each `srun` experiment can be found at [Run 1](https://wandb.ai/janezk/bird_example_arnes/runs/0asl9ekr/) and [Run 2](https://wandb.ai/janezk/bird_example_arnes/runs/77qvmk0m). The expected running time is approximately 30 minutes on Nvidia V100s GPU.
 
-### Data Parallelization on a Single Node using PyTorch DataParallel ([Obsolete](https://pytorch.org/tutorials/beginner/ddp_series_theory.html#why-you-should-prefer-ddp-over-dataparallel-dp))
+### Data Parallelization on a Single Node using PyTorch DataParallel ([restricted](https://pytorch.org/tutorials/beginner/ddp_series_theory.html#why-you-should-prefer-ddp-over-dataparallel-dp))
 
 The scripts [train_singlenode_dp.sh](train_singlenode_dp.sh) and [train_singlenode_dp.py](train_singlenode_dp.py) illustrate data parallelization using the DataParallel approach. PyTorch's DataParallel replicates the model across available GPUs within a single machine, dividing input data into smaller batches for parallel processing on each GPU. It independently computes gradients on these batches, aggregates them, and synchronizes the model's parameters across all GPUs after each update. Run the example using the following command:
 ```bash
