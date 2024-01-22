@@ -15,7 +15,7 @@ The scripts [train_singlenode.sh](train_singlenode.sh) and [train_singlenode.py]
 ```bash
 sbatch train_singlenode.sh
 ```
-Details for each `srun` experiment can be found at [Run 1](https://wandb.ai/janezk/bird_example_arnes/runs/0asl9ekr/) and [Run 2](https://wandb.ai/janezk/bird_example_arnes/runs/77qvmk0m). The expected running time is approximately 30 minutes on Nvidia V100s GPU.
+Details for each `srun` experiment can be found at [Run 1](https://wandb.ai/janezk/bird_example_arnes/runs/0asl9ekr/) and [Run 2](https://wandb.ai/janezk/bird_example_arnes/runs/77qvmk0m). The expected training time for 10 epochs is approximately 30 minutes on Nvidia V100s GPU.
 
 ### Data Parallelization on a Single Node using PyTorch DataParallel ([constrained](https://pytorch.org/tutorials/beginner/ddp_series_theory.html#why-you-should-prefer-ddp-over-dataparallel-dp))
 
@@ -23,7 +23,7 @@ The scripts [train_singlenode_dp.sh](train_singlenode_dp.sh) and [train_singleno
 ```bash
 sbatch train_singlenode_dp.sh
 ```
-Details are available at [Run](https://wandb.ai/janezk/bird_example_arnes/runs/s4amb7l6/). The expected running time is approximately 20 minutes on Nvidia V100s GPU.
+Details are available at [Run](https://wandb.ai/janezk/bird_example_arnes/runs/s4amb7l6/). The expected training time for 10 epochs is approximately 20 minutes on 2 Nvidia V100s GPUs.
 
 ### Data Parallelization on Multiple Nodes using PyTorch DistributedDataParallel
 
@@ -33,4 +33,4 @@ Utilizing PyTorch's DistributedDataParallel incurs less overhead compared to Dat
 ```bash
 sbatch train_multinode_ddp.sh
 ```
-Refer to the experiment's details at [Run](https://wandb.ai/janezk/bird_example_arnes/runs/trrp5ou3). The expected running time is approximately 10 minutes on Nvidia V100s GPU.
+Refer to the experiment's details at [Run](https://wandb.ai/janezk/bird_example_arnes/runs/trrp5ou3). The expected training time is approximately 10 minutes on 4 Nvidia V100s GPUs.

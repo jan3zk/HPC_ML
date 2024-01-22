@@ -11,7 +11,7 @@
 #SBATCH --mem-per-gpu=32G     # memory allocation
 
 source ~/miniconda3/etc/profile.d/conda.sh  # initialize conda
-conda activate pytorch_env  # activate the previously created environment
+conda activate py310  # activate the previously created environment
 
 OUT_PATH=/d/hpc/projects/FRI/DL/example/bird_data/
 

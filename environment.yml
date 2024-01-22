@@ -1,4 +1,4 @@
-name: py310
+name: pytorch_env
 channels:
   - pytorch
   - nvidia
@@ -194,4 +194,3 @@ dependencies:
   - zlib=1.2.13=h5eee18b_0
   - zstandard=0.19.0=py310h5eee18b_0
   - zstd=1.5.5=hc292b87_0
-prefix: /d/hpc/home/jkrizaj/miniconda3/envs/py310

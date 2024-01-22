@@ -15,4 +15,4 @@ conda activate py310                 # activate the previously created environme
 OUT_PATH=/d/hpc/projects/FRI/DL/example/bird_data/
 
 # Run the training script twice with different hyperparameters.
-srun --nodes=1 --gpus=2 --ntasks=1 python train_1node_2gpus.py --lr 1e-4 --epochs 10 --batch_size 256 --out_path $OUT_PATH
+srun --nodes=1 --gpus=2 --ntasks=1 python train_singlenode_dp.py --lr 1e-4 --epochs 10 --batch_size 128 --out_path $OUT_PATH
