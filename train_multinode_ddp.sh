@@ -23,5 +23,12 @@ echo $WORLD_SIZE
 echo "NODELIST="${SLURM_NODELIST}
 echo "JOB_NODELIST="${SLURM_JOB_NODELIST}
 
+OUT_PATH=/d/hpc/projects/FRI/DL/example/bird_data/
+
+export NCCL_DEBUG=INFO
+#export NCCL_P2P_DISABLE=1
+#export NCCL_IB_DISABLE=1
+#export NCCL_BLOCKING_WAIT=1
+
 ### the command to run
-srun python train_multinode_ddp.py --lr 1e-4 --epochs 4 --batch_size 64
+srun python train_multinode_ddp.py --lr 1e-4 --epochs 4 --batch_size 64 --out_path $OUT_PATH
