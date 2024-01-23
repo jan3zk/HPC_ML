@@ -25,7 +25,7 @@ echo "JOB_NODELIST="${SLURM_JOB_NODELIST}
 
 OUT_PATH=/d/hpc/projects/FRI/DL/example/bird_data/
 
-export NCCL_DEBUG=INFO
+#export NCCL_DEBUG=INFO
 #export NCCL_P2P_DISABLE=1
 #export NCCL_IB_DISABLE=1
 #export NCCL_BLOCKING_WAIT=1
