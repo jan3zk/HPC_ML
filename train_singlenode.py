@@ -5,7 +5,7 @@ import torchvision
 import torchvision.transforms as transforms
 import wandb
 
-wandb.init(project="bird_example", entity="janezk", name="bird_example_singlenode")
+wandb.init(mode='online', project="bird_example", entity="janezk", name="bird_example_singlenode")
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -17,7 +17,7 @@ def parse_args():
                         help='start epoch number (useful on restarts)')
     parser.add_argument('--epochs', default=10, type=int, help='number of total epochs to run')
     parser.add_argument('-j', '--workers', default=12, type=int, metavar='N',
-                        help='number of data loading workers (default: 32)')
+                        help='number of data loading workers (default: 12)')
     args = parser.parse_args()
     return args
 
