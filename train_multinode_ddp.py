@@ -1,4 +1,4 @@
-import os
+import os, sys
 import argparse
 import torch
 from torch import nn
@@ -17,7 +17,7 @@ def parse_args():
     parser.add_argument('--start_epoch', default=0, type=int,
                         help='start epoch number (useful on restarts)')
     parser.add_argument('--epochs', default=10, type=int, help='number of total epochs to run')
-    parser.add_argument('-j', '--workers', default=8, type=int, metavar='N',
+    parser.add_argument('-j', '--workers', default=12, type=int, metavar='N',
                         help='number of data loading workers (default: 32)')
     # DDP configs:
     parser.add_argument('--world_size', default=-1, type=int,
@@ -26,7 +26,7 @@ def parse_args():
                         help='node rank for distributed training')
     parser.add_argument('--dist_url', default='env://', type=str,
                         help='url used to set up distributed training')
-    parser.add_argument('--dist-backend', default='nccl', type=str,
+    parser.add_argument('--dist_backend', default='nccl', type=str,
                         help='distributed backend')
     parser.add_argument('--local_rank', default=-1, type=int,
                         help='local rank for distributed training')
@@ -48,7 +48,8 @@ def main(args):
         elif 'SLURM_PROCID' in os.environ:  # for slurm scheduler
             args.rank = int(os.environ['SLURM_PROCID'])
             args.gpu = args.rank % torch.cuda.device_count()
-        dist.init_process_group(backend=args.dist_backend, init_method=args.dist_url, world_size=args.world_size, rank=args.rank)
+        dist.init_process_group(backend=args.dist_backend, init_method=args.dist_url,
+                                world_size=args.world_size, rank=args.rank)
 
     ### model ###
     model = torchvision.models.resnet152(weights=torchvision.models.ResNet152_Weights.IMAGENET1K_V1)
@@ -81,7 +82,8 @@ def main(args):
     }
 
     if args.rank == 0:
-        wandb.init(mode="online", project="bird_example", entity="janezk", name="bird_example_multinode_ddp")
+        wandb.init(mode="disabled", project="bird_example",
+                   entity="janezk", name="bird_example_multinode_ddp")
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 
