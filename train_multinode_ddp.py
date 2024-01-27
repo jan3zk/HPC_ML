@@ -83,7 +83,7 @@ def main(args):
 
     if args.rank == 0:
         wandb.init(mode="disabled", project="bird_example",
-                   entity="janezk", name="bird_example_multinode_ddp")
+                   entity=os.environ["USER"], name="bird_example_multinode_ddp")
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 

@@ -1,3 +1,4 @@
+import os
 import argparse
 import torch
 from torch import nn
@@ -5,7 +6,7 @@ import torchvision
 import torchvision.transforms as transforms
 import wandb
 
-wandb.init(mode='online', project="bird_example", entity="janezk", name="bird_example_singlenode")
+wandb.init(mode="disabled", project="bird_example", entity=os.environ["USER"], name="bird_example_singlenode")
 
 def parse_args():
     parser = argparse.ArgumentParser()
