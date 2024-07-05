@@ -8,6 +8,11 @@ import torchvision
 import torchvision.transforms as transforms
 import wandb
 
+os.environ["WANDB__SERVICE_WAIT"] = "300"
+WORLD_SIZE = int(os.environ['SLURM_NTASKS'])
+WORLD_RANK = int(os.environ['SLURM_PROCID'])
+LOCAL_RANK = int(os.environ['SLURM_LOCALID'])
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--lr', default=1e-3, type=float, help='learning rate')
@@ -15,18 +20,14 @@ def parse_args():
     parser.add_argument('--epochs', default=10, type=int, help='number of total epochs to run')
     parser.add_argument('-j', '--workers', default=12, type=int, metavar='N',
                         help='number of data loading workers (default: 32)')
+    parser.add_argument('--out_path', default='./bird_data/', type=str)
     # DDP configs:
     parser.add_argument('--dist_url', default='env://', type=str,
                         help='url used to set up distributed training')
     parser.add_argument('--dist_backend', default='nccl', type=str,
                         help='distributed backend')
-    parser.add_argument('--out_path', default='./bird_data/', type=str)
     args = parser.parse_args()
     return args
-
-WORLD_SIZE = int(os.environ['SLURM_NTASKS'])
-WORLD_RANK = int(os.environ['SLURM_PROCID'])
-LOCAL_RANK =int(os.environ['SLURM_LOCALID'])
 
 def main(args):
     dist.init_process_group(backend=args.dist_backend, init_method=args.dist_url,

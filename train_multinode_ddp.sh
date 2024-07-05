@@ -18,8 +18,5 @@ export MASTER_PORT=50202
 echo "MASTER_ADDR:MASTER_PORT="${MASTER_ADDR}:${MASTER_PORT}
 echo "NODELIST="${SLURM_NODELIST}
 
-export WANDB__SERVICE_WAIT=600
-
 OUT_PATH=/d/hpc/projects/FRI/DL/example/bird_data/
-
 srun python train_multinode_ddp.py --lr 1e-3 --epochs 2 --batch_size 16 --out_path $OUT_PATH
